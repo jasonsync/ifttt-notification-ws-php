@@ -7,13 +7,26 @@ Notification PHP web service for IFTTT:
 
 ## Configuration:
 
+Change the database configuration in config.php:
+```php
+$config = [
+  'secret'=>'<your_secret>',
+  'mysql' => [
+    'server'=>'<your.server.url>',
+    'database'=>'<your_database_name>',
+    'username'=>'<your_username>',
+    'password'=>'<your_password>'
+  ]
+];
+```
+
 *This follows the IFTTT webhook examples found in their [FAQ](https://help.ifttt.com/hc/en-us/articles/115010230347-Webhooks-service-FAQ)*
 
-### Trigger
+### Trigger:
 *In IFTTT, under the `IF` section, create a new `webhook` trigger*
 
 
-### Action
+### Action:
 *In IFTTT, under the `THEN` section, create a new `webhook` action*
 
 **Use the following options:**
