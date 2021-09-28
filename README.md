@@ -14,7 +14,7 @@ This works in 2 parts.
 
 2. You need to invoke the webservice:
    - Call this web service ("THEN" webhook action)
-   - Provide optional configuration
+   - Provide notification information & optional configuration
 
 
 ## Configuration
