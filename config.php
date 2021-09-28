@@ -9,5 +9,6 @@ $config = [
     'database'=>'DATABASE_NAME',
     'username'=>'MYSQL_USERNAME',
     'password'=>'MYSQL_PASSWORD'
-  ]
+  ],
+  'debug_mysqli'=> true
 ];
