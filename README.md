@@ -24,6 +24,7 @@ Change the database configuration in config.php:
 ```php
 $config = [
   'ifttt_key'=>'IFTTT_KEY',
+  'ifttt_hook'=>'IFTTT_HOOK',
   'ws_secret'=>'POST_SECRET',
   'default_rate_limit_s'=> 900, // default rate limit in seconds (if not specified by request, use this rate limit)
   'mysql' => [
@@ -37,6 +38,7 @@ $config = [
 ## Applet Integration
 
 - `IFTTT_KEY` = Found by clicking "Documentation" at: https://ifttt.com/maker_webhooks/
+- `IFTTT_HOOK` = The "Event Name" of the webhook trigger in IFTTT
 - `POST_SECRET` = Expected by the HTTP request variable: $_POST['s'] to prevent rogue injection (set this to something not easily guessed).
 
 *This follows the IFTTT webhook examples found in their [FAQ](https://help.ifttt.com/hc/en-us/articles/115010230347-Webhooks-service-FAQ)*
