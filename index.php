@@ -95,16 +95,16 @@ if ($result->num_rows === 1) {
     }
 }
 
-function build_params($type)
+function build_notification_text($type)
 {
     global $inserted_timestamp;
     global $data;
-    $p1 = '?value1=';
-    $p2 = '&value2=';
-    $p3 = '&value3=';
+    $param_device = '';
+    $param_event = '';
+    $param_timestamp = '';
 
-    $p1 .= urlencode($data["device"]);
-    $p3 .= urlencode($inserted_timestamp);
+    $param_device .= urlencode($data["device"]);
+    $param_timestamp .= urlencode($inserted_timestamp);
 
     switch ($type) {
     case 'door':
@@ -114,36 +114,38 @@ function build_params($type)
       } elseif ($value == 'off') {
           $value = 'closed';
       }
-      $p2 .= $value;
+      $param_event .= $value;
       break;
     case 'temp':
       $value = urlencode($data["value"]);
-      $p2 .= $value.'C';
+      $param_event .= $value.'C';
       break;
     case 'test':
     default:
-      $p2 .= urlencode($data["value"]);
+      $param_event .= urlencode($data["value"]);
       break;
   }
-    return $p1 .''. $p2 .''. $p3;
+    return $param_device ." is now:\n". $param_event ."\n\nTime reported:\n". $param_timestamp;
 }
 
-/* INVOKE IFTTT WEBHOOK */
-
-$ifttt_hook = $config['ifttt_hook'];
-if (isset($data['ifttt_hook'])) {
-    $ifttt_hook = $data['ifttt_hook'];
+function tg_bot_msg_post_body($chat_id, $text)
+{
+    return "chat_id=".$chat_id."&text=".$text;
 }
-$url = 'https://maker.ifttt.com/trigger/'.$ifttt_hook.'/with/key/'.$config['ifttt_key'].build_params($device_type);
 
-echo '<br><br>- Calling IFTTT...';
-echo '<br><br>URL:<br>';
-echo $url;
-echo '<br><br>';
-echo '<br><br>- IFTTT response:';
+/* Invoke Telegram Notification Bot */
+$url = 'https://api.telegram.org/bot'.$config['telegram_notification_bot_token'].'/sendMessage';
+$post_body = tg_bot_msg_post_body($config['telegram_chat_id'], build_notification_text($device_type));
+
+echo '<br><br>- Telegram bot: send message...';
+
+echo '<br><br>- BOT API response:';
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post_body);
+
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 $response = curl_exec($ch);
