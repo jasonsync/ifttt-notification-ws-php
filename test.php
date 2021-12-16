@@ -58,6 +58,10 @@
       </select>
       <br>
       <label for="value">Value: </label><input type="text" name="value" value="2" onClick="this.setSelectionRange(0, this.value.length)">
+      <br>
+      <label for="chat">(opt) TG chat: </label><input type="text" name="chat" value="" onClick="this.setSelectionRange(0, this.value.length)">
+      <br>
+      <label for="chat">(opt) TG chat_id: </label><input type="text" name="chat_id" value="" onClick="this.setSelectionRange(0, this.value.length)">
       <br><br>
       <input type="submit" name="" value="Submit GET">
     </form>
@@ -79,6 +83,10 @@
       </select>
       <br>
       <label for="value">Value: </label><input type="text" name="value" value="2" onClick="this.setSelectionRange(0, this.value.length)">
+      <br>
+      <label for="chat">(opt) TG chat: </label><input type="text" name="chat" value="" onClick="this.setSelectionRange(0, this.value.length)">
+      <br>
+      <label for="chat">(opt) TG chat_id: </label><input type="text" name="chat_id" value="" onClick="this.setSelectionRange(0, this.value.length)">
       <br><br>
       <input type="submit" name="" value="Submit POST">
     </form>
@@ -99,6 +107,10 @@
       </select>
       <br>
       <label for="value">Value: </label><input type="text" id="form_value" name="value" value="2" onClick="this.setSelectionRange(0, this.value.length)">
+      <br>
+      <label for="chat">(opt) TG chat: </label><input type="text" id="form_chat" name="chat" value="" onClick="this.setSelectionRange(0, this.value.length)">
+      <br>
+      <label for="chat">(opt) TG chat_id: </label><input type="text" id="form_chat_id" name="chat_id" value="" onClick="this.setSelectionRange(0, this.value.length)">
       <br><br>
       <input type="submit" name="" value="Submit JSON POST">
     </form>
@@ -119,6 +131,8 @@
       var form_device = document.getElementById("form_device").value;
       var form_device_type = document.getElementById("form_device_type").value;
       var form_value = document.getElementById("form_value").value;
+      var form_chat = document.getElementById("form_chat").value;
+      var form_chat_id = document.getElementById("form_chat_id").value;
 
       const rawResponse = await fetch('index.php', {
         method: 'POST',
@@ -132,7 +146,9 @@
           ifttt_hook: form_ifttt_hook,
           device: form_device,
           device_type: form_device_type,
-          value: form_value
+          value: form_value,
+          chat: form_chat,
+          chat_id: form_chat_id
         })
       });
       const content = await rawResponse.text();

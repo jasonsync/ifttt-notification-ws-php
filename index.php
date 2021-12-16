@@ -47,6 +47,38 @@ if (isset($data["time"])) {
     $time = $data["time"];
 }
 
+/*
+  Determine telegram chat_id, with the following priority:
+  - 1) If "chat_id" is provided in request, use its value
+  - 2) If "chat" (chat name) is provided in the config file, use its value,
+        e.g. $config['telegram']['chat_ids']['<<<SOME CHAT NAME>>>'] = "-1231424125";
+  - 3) cross reference device against config's chat_ids keys.
+  - 4) use default chat_id if still not found.
+*/
+
+$telegram_chat_id = "";
+if (isset($data["chat_id"]) && $data["chat_id"] !== "") {
+    // 1)
+    $telegram_chat_id = $data["chat_id"];
+} elseif (isset($data["chat"]) && $data["chat"] !== "") {
+    // 2)
+    if (isset($config['telegram']['chat_ids'][$data["chat"]])) {
+        $telegram_chat_id = $config['telegram']['chat_ids'][$data["chat"]];
+    }
+} else {
+    // 3)
+    foreach ($config['telegram']['chat_ids'] as $chat_name => $chat_id) {
+        if (strpos($data["device"], $chat_name)!== false) {
+            $telegram_chat_id = $chat_id;
+        }
+    }
+}
+
+if (!$telegram_chat_id) {
+    // 4)
+    $telegram_chat_id = $config['telegram']['chat_ids']['default'];
+}
+
 
 /*
 RATE LIMITING:
@@ -134,8 +166,8 @@ function tg_bot_msg_post_body($chat_id, $text)
 }
 
 /* Invoke Telegram Notification Bot */
-$url = 'https://api.telegram.org/bot'.$config['telegram_notification_bot_token'].'/sendMessage';
-$post_body = tg_bot_msg_post_body($config['telegram_chat_id'], build_notification_text($device_type));
+$url = 'https://api.telegram.org/bot'.$config['telegram']['notification_bot_token'].'/sendMessage';
+$post_body = tg_bot_msg_post_body($telegram_chat_id, build_notification_text($device_type));
 
 echo '<br><br>- Telegram bot: send message...';
 
