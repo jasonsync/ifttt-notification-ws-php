@@ -69,11 +69,10 @@ if (isset($data["chat_id"]) && $data["chat_id"] !== "") {
     // 3)
     foreach ($config['telegram']['chat_ids'] as $chat_name => $chat_id) {
         if (strpos($data["device"], $chat_name)!== false) {
-            $telegram_chat_id = $chat_id;
+            $telegram_chat_id = $config['telegram']['chat_ids'][$chat_name];
         }
     }
 }
-
 if (!$telegram_chat_id) {
     // 4)
     $telegram_chat_id = $config['telegram']['chat_ids']['default'];
